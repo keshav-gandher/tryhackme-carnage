@@ -26,3 +26,10 @@ Since we already identified the downloaded file while exporting HTTP objects in 
 In the packet where the ZIP file is requested, inspect the HTTP details. The Host field contains the domain name of the web server the client is communicating with, making it the logical place to identify the hosting domain.
 
 **Key Takeaway:** The HTTP Host field identifies the destination domain, making it valuable when tracing where a file was downloaded from.
+
+##
+### Without downloading the file, what is the name of the file in the zip file?
+
+To identify the filename without downloading the archive we go to the packet where the ZIP file was requested and then right click and choose `Follow Stream > HTTP`. The Follow Stream option in Wireshark is used to reconstruct and stitch together scattered packets back into a single, continuous, and human-readable conversation. This reconstructs the HTTP conversation, allowing us to inspect the server's response and the transferred file data. From there, scroll through the reconstructed stream until the filename appears.
+
+**Key Takeaway:** The Follow Stream feature reconstructs an application-layer conversation (such as HTTP), making it easier to inspect requests, responses, and transferred data.
