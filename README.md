@@ -48,3 +48,22 @@ The web server version is included in the same HTTP Server header examined in th
 
 **Key Takeaway:** The Server header often reveals both the web server software and its version, which can be useful for identifying outdated or vulnerable services.
 
+##
+### 7.Malicious files were downloaded to the victim host from multiple domains. What were the three domains involved with this activity?
+
+The Malicious files were downloaded to the victim host but were not shown in Export Objects which suggested that the files were transferred over `HTTPS` rather than `HTTP`. HTTPS traffic commonly uses `TCP port 443.`   After filter we apply the source IP to be the compromised IP to shorten the list. We use the Client Hello in TLS. The `TLS Client Hello` is useful because it contains the Server Name Indication (SNI), which is sent in plaintext before encryption begins. Because it is the only place where the malicious domain names are transmitted in plain text.
+
+Now there were still too many packets to go through each one and we don't even know how to identify the Domains. To makes things easier we apply the Server section in the tls protocol as a column.
+
+Now because we know the time of attack we can apply the filter as the files must have downloaded shortly after that. After setting the time right after the first contact we just scroll down looking for domains that appear unusual or are associated with the suspected malicious activity.
+
+**Key Takeaway:** When data is transferred over HTTPS, the file contents are encrypted, but the TLS handshake can still reveal useful metadata, such as the requested server name (SNI), which is valuable during an investigation.
+
+##
+### 8.Which certificate authority issued the SSL certificate to the first domain from the previous question?
+
+To see the certificate authority we have to know were can we find it. During the TLS handshake, the server sends its digital certificate. This certificate contains information about the issuing Certificate Authority (CA). In order to look at this particular Server Response we need to change the display filter a little. As the Response is coming from the server its Ip Address becomes the source `IP Address` for the system and also to isolate the certificate sent by the server, apply the display filter `tls.handshake.certificate`. This narrows the capture to the packet containing the server's certificate.
+
+After looking at the information in the certificate section of `TLS Protocol` details we can see the certificate authority which issued the SSL certificate.
+
+**Key Takeaway:** When looking for a specific information it is better to first identify which protocol and packet type normally contain that information. Then look for ways to filter out that kind of packet.
